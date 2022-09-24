@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,6 +72,32 @@ public class TestCartController {
 		
 	}
 	
+	@Test
+	public void testRemoveFromCart() {
+		User user = createUser();
+		Item item = createItem();
+		user.getCart().addItem(item);
+		
+		when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+		when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+		
+		
+		ModifyCartRequest removeFromCartRequest = new ModifyCartRequest();
+		removeFromCartRequest.setUsername(user.getUsername());
+		removeFromCartRequest.setQuantity(1);
+		removeFromCartRequest.setItemId(1);
+		
+		ResponseEntity<Cart> response = cartController.removeFromcart(removeFromCartRequest);
+		
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		
+		// check that item was removed
+		Cart cart = response.getBody();
+		assertEquals(0, cart.getItems().size());
+		assertTrue(BigDecimal.valueOf(0).compareTo(cart.getTotal()) == 0);
+	}
+	
 	private Item createItem() {
 		Item item = new Item();
 		item.setId(1L);
@@ -87,9 +114,10 @@ public class TestCartController {
 		u.setId(1);
 		u.setUsername("test");
 		u.setPassword("testpass");		
-		Cart cart = new Cart();
+		Cart cart = new Cart();		
 		u.setCart(cart);
 		return u;
 	}
+	
 	
 }
