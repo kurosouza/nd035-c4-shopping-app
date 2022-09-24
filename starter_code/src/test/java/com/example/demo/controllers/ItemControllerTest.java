@@ -63,10 +63,26 @@ public class ItemControllerTest {
 		
 	}
 	
+	@Test
+	public void testGetItemsByName() {
+		Item item = createItem();
+		when(itemRepository.findByName("turbo_controller")).thenReturn(List.of(item));
+		ResponseEntity<List<Item>> response = itemController.getItemsByName("turbo_controller");
+		
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		
+		List<Item> items = response.getBody();
+		
+		assertEquals(1, items.size());
+		assertEquals(item.getId(), items.get(0).getId());
+		
+	}
+	
 	private Item createItem() {
 		Item item = new Item();
 		item.setId(1L);
-		item.setName("Turbo Controller");
+		item.setName("turbo_controller");
 		item.setDescription("Playstation 4 Enhanced Vibration Controller");
 		item.setPrice(BigDecimal.valueOf(39.99));
 		
