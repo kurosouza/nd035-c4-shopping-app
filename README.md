@@ -4,7 +4,7 @@
 
 Repository
 
-https://github.com/kurosouza/nd035-c4-Security-and-DevOps-Project/tree/main
+https://github.com/kurosouza/nd035-c4-shopping-app
 
 **Screenshots are in the /screenshots folder**
 
